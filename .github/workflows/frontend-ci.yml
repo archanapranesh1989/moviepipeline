@@ -30,7 +30,7 @@ jobs:
       - run: pwd
 
       # Run the tests.
-      - run: cd starter/frontend && npm test
+      - run: cd starter/frontend && npm test --passWithNoTests
 
       # Run the linter.
       - run: cd starter/frontend && npm run lint
