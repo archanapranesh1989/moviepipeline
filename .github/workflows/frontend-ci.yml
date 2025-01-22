@@ -25,7 +25,7 @@ jobs:
           node-version: latest
 
       # Install the dependencies.
-      - run: cd frontend && nvm use
+      - run: cd starter/frontend && nvm use
 
       # Run the tests.
       - run: npm ci && npm test
