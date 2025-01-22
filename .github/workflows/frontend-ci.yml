@@ -46,6 +46,6 @@ jobs:
     steps:
       
       - name: Run Linting
-        run: npm run lint
+        run: cd starter/frontend && npm run lint
 
         
