@@ -26,6 +26,9 @@ jobs:
       # Install the dependencies.
       - run: cd starter/frontend && npm ci
 
+      # check thw preseent working directory
+      - run: pwd
+
       # Run the tests.
       - run: cd starter/frontend && npm test
 
