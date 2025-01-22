@@ -7,10 +7,16 @@ on:
   push:
     branches: 
       - main
+  # Automatic trigger on pull request events targeting the main branch
+  pull_request:
+    paths:
+      - 'starter/frontend/**'
+    branches:
+      - main
 
 #Use a matrix strategy to use Node.js versions 16.x and 18.x
 jobs:
-  lint_job:
+  test_job:
 
     runs-on: ubuntu-latest
 
@@ -31,12 +37,15 @@ jobs:
       - run: cd starter/frontend && CI=true npm test
       
 
-      # run the linting
-      - run: cd starter/frontend && npm run lint
+      # # run the linting
+      # - run: cd starter/frontend && npm run lint
         
 
-      # Send a console message at completion.
-      - run: |
-          echo "Hello ${{github.actor}}. You pushed to ${{github.repository}} at $(date)."
+  lint_job:
+    runs-on: ubuntu-latest
+    steps:
+      
+      - name: Run Linting
+        run: npm run lint
 
         
