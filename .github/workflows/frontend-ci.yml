@@ -25,7 +25,11 @@ jobs:
           node-version: latest
 
       # Run the tests.
-      - run: cd starter/frontend && npm ci && npm test
+      - run: cd starter/frontend && npm ci
+
+     #Run the testa
+      - run: CI=true npm test
+      
 
       # run the linting
       - run: npm run lint
