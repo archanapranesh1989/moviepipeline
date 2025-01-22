@@ -1,0 +1,81 @@
+name: ci-fullstack-backend-ci
+
+# Manual trigger
+on:
+  workflow_dispatch:
+
+  push:
+    branches: 
+      - main
+      #comment this later--------------------#
+  # Automatic trigger on pull request events targeting the main branch
+  pull_request:
+    paths:
+      - 'starter/backend/**'
+    branches:
+      - main
+
+
+jobs:
+  test_job:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      # Check out the code from the repository.
+     
+      - uses: actions/checkout@v3
+
+      # Set up a Node.js environment using the specified node version.
+      - uses: actions/setup-python@v4
+        with:
+          python-version: latest
+
+      # INstall 
+      - run: cd starter/backend && pipenv install
+
+
+     #Run the testa
+      - run: cd starter/backend && pipenv run test
+      
+
+
+  lint_job:
+    runs-on: ubuntu-latest
+    steps:    
+       # Check out the code from the repository.
+     
+      - uses: actions/checkout@v3
+
+      # Set up a Node.js environment using the specified node version.
+      - uses: actions/setup-python@v4
+        with:
+          python-version: latest
+      - name: Run Linting
+        run: cd starter/backend && pipenv run lint
+
+  # build_job: 
+  #   runs-on: ubuntu-latest
+  #   needs: [test_job]
+  #   #needs: [test_job,lint_job] ----comment this later, it needs to have both
+
+  #   steps:
+  #       # checkout of code from repo
+  #    - name: checkout code
+  #      uses: actions/checkout@v3
+
+  #      # Set up a Node.js environment using the specified node version.
+  #    - name: setup noe js
+  #      uses: actions/setup-node@v3
+  #      with:
+  #         node-version: latest
+          
+  #    - name: Install dependencies
+  #      run: cd starter/frontend && npm ci
+        
+  #    - name: docker image
+  #      run: |
+  #         cd starter/frontend  # Navigate to the frontend directory
+  #         docker build --build-arg=REACT_APP_MOVIE_API_URL=http://localhost:5000 --tag=mp-frontend:latest .
+
+     
