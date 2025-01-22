@@ -60,23 +60,22 @@ jobs:
     needs: [lint_job, test_job]
 
     steps:
-    - name: Check out repository
-      uses: actions/checkout@v3
+        # checkout of code from repo
+     - name: checkout code
+       uses: actions/checkout@v3
 
-
-    - name: Use Node.js 
-    - uses: actions/setup-node@v3
-      with:
+       # Set up a Node.js environment using the specified node version.
+     - name: setup noe js
+       uses: actions/setup-node@v3
+       with:
           node-version: latest
+          
+     - name: Install dependencies
+       run: cd starter/frontend && npm ci
         
-             
-    - name: Install dependencies
-      run:  cd /starter/frontend && npm ci
+     - name: docker image
+       run: |
+          cd starter/frontend  # Navigate to the frontend directory
+          docker build --build-arg=REACT_APP_MOVIE_API_URL=http://localhost:5000 --tag=mp-frontend:latest .
 
-    - name: Build Docker Image
-      run: |
-          echo "Docker image build"  
-          cd /starter/frontend
-          docker build --build-arg=REACT_APP_MOVIE_API_URL=http://localhost:5000 --tag=mp-frontend:latest .  
-
-        
+     
