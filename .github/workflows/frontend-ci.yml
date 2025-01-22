@@ -24,11 +24,8 @@ jobs:
         with:
           node-version: latest
 
-      # Install the dependencies.
-      - run: cd starter/frontend && nvm use
-
       # Run the tests.
-      - run: npm ci && npm test
+      - run: cd starter/frontend && npm ci && npm test
 
       # run the linting
       - run: npm run lint
