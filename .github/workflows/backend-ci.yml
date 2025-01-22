@@ -50,35 +50,39 @@ jobs:
      
       - uses: actions/checkout@v3
 
-      # Set up a Node.js environment using the specified node version.
+      # Set up a python environment using the specified  version.
       - uses: actions/setup-python@v4
         with:
           python-version: "3.10"
+
+       # install dependencies
+      - run: cd starter/backend && pip install pipenv 
+
+      # INstall 
+      - run: cd starter/backend && pipenv install
       - name: Run Linting
         run: cd starter/backend && pipenv run lint
 
-  # build_job: 
-  #   runs-on: ubuntu-latest
-  #   needs: [test_job]
-  #   #needs: [test_job,lint_job] ----comment this later, it needs to have both
+  build_job: 
+    runs-on: ubuntu-latest
+    needs: [test_job]
+    #needs: [test_job,lint_job] ----comment this later, it needs to have both
 
-  #   steps:
-  #       # checkout of code from repo
-  #    - name: checkout code
-  #      uses: actions/checkout@v3
-
-  #      # Set up a Node.js environment using the specified node version.
-  #    - name: setup noe js
-  #      uses: actions/setup-node@v3
-  #      with:
-  #         node-version: latest
+    steps:
+        # checkout of code from repo
+     - name: checkout code
+       uses: actions/checkout@v3
+     - name: python setup
+        # Set up a python environment using the specified  version.
+       uses: actions/setup-python@v4
+       with:
+          python-version: "3.10"
           
-  #    - name: Install dependencies
-  #      run: cd starter/frontend && npm ci
+
         
-  #    - name: docker image
-  #      run: |
-  #         cd starter/frontend  # Navigate to the frontend directory
-  #         docker build --build-arg=REACT_APP_MOVIE_API_URL=http://localhost:5000 --tag=mp-frontend:latest .
+     - name: docker image
+       run: |
+          cd starter/backend  # Navigate to the backend directory
+          docker build --tag=mp-backend:latest .
 
      
