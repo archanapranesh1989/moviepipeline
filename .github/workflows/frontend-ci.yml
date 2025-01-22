@@ -16,6 +16,7 @@ jobs:
 
     steps:
       # Check out the code from the repository.
+      - run: cd starter/frontend
       - uses: actions/checkout@v3
 
       # Set up a Node.js environment using the specified node version.
@@ -24,16 +25,16 @@ jobs:
           node-version: latest
 
       # Install the dependencies.
-      - run: cd starter/frontend && npm ci
+      - run:  npm ci
 
       # check thw preseent working directory
       - run: pwd
 
       # Run the tests.
-      - run: cd starter/frontend && npm test --passWithNoTests
+      - run: npm test --passWithNoTests
 
       # Run the linter.
-      - run: cd starter/frontend && npm run lint
+      - run: npm run lint
 
       # Send a console message at completion.
       - run: |
