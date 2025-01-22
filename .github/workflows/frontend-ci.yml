@@ -1,12 +1,13 @@
 name: ci-fullstack-workflow
 
-# Ensure the workflow runs on schedule (Sunday at 0:00) and on push to the main branch
+# Manual trigger
 on:
   workflow_dispatch:
 
   push:
     branches: 
       - main
+      #comment this later--------------------#
   # Automatic trigger on pull request events targeting the main branch
   pull_request:
     paths:
@@ -14,7 +15,7 @@ on:
     branches:
       - main
 
-#Use a matrix strategy to use Node.js versions 16.x and 18.x
+
 jobs:
   test_job:
 
@@ -58,6 +59,7 @@ jobs:
   build_job: 
     runs-on: ubuntu-latest
     needs: [test_job]
+    #needs: [test_job,lint_job] ----comment this later, it needs to have both
 
     steps:
         # checkout of code from repo
