@@ -24,13 +24,13 @@ jobs:
           node-version: latest
 
       # Install the dependencies.
-      - run: cd frontend && npm ci
+      - run: cd starter/frontend && npm ci
 
       # Run the tests.
-      - run: cd frontend && npm test
+      - run: cd starter/frontend && npm test
 
       # Run the linter.
-      - run: cd frontend && npm run lint
+      - run: cd starter/frontend && npm run lint
 
       # Send a console message at completion.
       - run: |
