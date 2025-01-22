@@ -10,7 +10,7 @@ on:
 
 #Use a matrix strategy to use Node.js versions 16.x and 18.x
 jobs:
-  build:
+  lint_job:
 
     runs-on: ubuntu-latest
 
@@ -25,19 +25,14 @@ jobs:
           node-version: latest
 
       # Install the dependencies.
-      - run:  npm ci
-        working-directory: frontend
-
-      # check thw preseent working directory
-      - run: pwd
+      - run: cd frontend && nvm use
 
       # Run the tests.
-      - run: npm test
-        working-directory: frontend
+      - run: npm ci && npm test
 
-      # Run the linter.
+      # run the linting
       - run: npm run lint
-        working-directory: frontend
+        
 
       # Send a console message at completion.
       - run: |
