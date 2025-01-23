@@ -96,17 +96,17 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
 
-     - name: Build, Tag image and push image to Amazon ECR
-       env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: frontend
-        IMAGE_TAG: ${{ github.sha }}
-        REACT_APP_MOVIE_API_URL: ${{ secrets.REACT_APP_MOVIE_API_URL }}
-       run: |
-          cd starter/frontend  # Navigate to the frontend directory
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG . --build-arg="REACT_APP_MOVIE_API_URL=$REACT_APP_MOVIE_API_URL"
-          echo "docker build is success"
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+     # - name: Build, Tag image and push image to Amazon ECR
+     #   env:
+     #    ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+     #    ECR_REPOSITORY: frontend
+     #    IMAGE_TAG: ${{ github.sha }}
+     #    REACT_APP_MOVIE_API_URL: ${{ secrets.REACT_APP_MOVIE_API_URL }}
+     #   run: |
+     #      cd starter/frontend  # Navigate to the frontend directory
+     #      docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG . --build-arg="REACT_APP_MOVIE_API_URL=$REACT_APP_MOVIE_API_URL"
+     #      echo "docker build is success"
+     #      docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           
 
      # - name: Update kube config
