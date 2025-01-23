@@ -1,0 +1,117 @@
+name: ci-fullstack-backend-ci
+
+# Manual trigger
+on:
+  workflow_dispatch:
+
+  push:
+    branches: 
+      - main
+      #comment this later--------------------#
+  # Automatic trigger on pull request events targeting the main branch
+  pull_request:
+    paths:
+      - 'starter/backend/**'
+    branches:
+      - main
+
+
+jobs:
+  test_job:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      # Check out the code from the repository.
+     
+      - uses: actions/checkout@v3
+
+      # Set up a Node.js environment using the specified node version.
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      # install dependencies
+      - run: cd starter/backend && pip install pipenv 
+
+      # INstall 
+      - run: cd starter/backend && pipenv install
+
+
+     #Run the testa
+      - run: cd starter/backend && pipenv run test
+      
+
+
+  lint_job:
+    runs-on: ubuntu-latest
+    steps:    
+       # Check out the code from the repository.
+     
+      - uses: actions/checkout@v3
+
+      # Set up a python environment using the specified  version.
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+       # install dependencies
+      - run: cd starter/backend && pip install pipenv 
+
+      - run: cd starter/backend && pip install flake8
+      - run: cd starter/backend && flake8 .
+
+      # INstall 
+      - run: cd starter/backend && pipenv install
+      - name: Run Linting
+        run: cd starter/backend && pipenv run lint
+
+  build_job: 
+    runs-on: ubuntu-latest
+    
+    needs: [test_job, lint_job]
+
+    steps:
+        # checkout of code from repo
+     - name: checkout code
+       uses: actions/checkout@v3
+     - name: python setup
+        # Set up a python environment using the specified  version.
+       uses: actions/setup-python@v4
+       with:
+          python-version: "3.10"
+     - name: Build and Run
+       run: cd starter/backend && pip install pipenv && pipenv install && pipenv run serve
+          
+     - name: Configure AWS credentials
+       uses: aws-actions/configure-aws-credentials@v1
+       with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+        
+     - name: Login to Amazon ECR
+       id: login-ecr
+       uses: aws-actions/amazon-ecr-login@v1
+       with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+
+     - name: Build, Tag image and push image to Amazon ECR
+       env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: backend
+        IMAGE_TAG: ${{ github.sha }}
+        REACT_APP_MOVIE_API_URL: ${{ secrets.REACT_APP_MOVIE_API_URL }}
+       run: |
+          cd starter/backend  # Navigate to the frontend directory
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG . --build-arg="REACT_APP_MOVIE_API_URL=$REACT_APP_MOVIE_API_URL"
+          echo "docker build is success"
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          
+        
+  
+      
+
+     
