@@ -118,9 +118,15 @@ jobs:
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG . --build-arg="REACT_APP_MOVIE_API_URL=$REACT_APP_MOVIE_API_URL"
           echo "docker build is success"
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+
           
      - name: Update the Kube config 
        run: aws eks update-kubeconfig --name cluster --region us-east-1
+
+     - name: call the terraform script
+      
+       uses: ./.github/workflows/terraform.yml  # Call the reusable workflow
        
      - name: Deploy to EKS cluster
        run: |
