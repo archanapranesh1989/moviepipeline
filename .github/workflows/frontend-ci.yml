@@ -32,10 +32,12 @@ jobs:
           node-version: latest
 
        # perform cache action
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: starter/frontend/node_modules  # Path to cache
-          key: ${{ runner.os }}-node-${{ hashFiles('frontend/package-lock.json') }}  # Cache key
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+
+    
 
 
       # Install the dependencies.
@@ -58,11 +60,11 @@ jobs:
         with:
           node-version: latest
      
-      # perform cache action
-      - uses: actions/cache@v2
+        # perform cache action
+      - uses: actions/cache@v3
         with:
           path: starter/frontend/node_modules  # Path to cache
-          key: ${{ runner.os }}-node-${{ hashFiles('frontend/package-lock.json') }}  # Cache key
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
           
       - name: Install dependencies and Run Linting
         run: cd starter/frontend && npm ci && npm run lint
