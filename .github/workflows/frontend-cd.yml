@@ -132,6 +132,26 @@ jobs:
      #   run: |
      #        chmod +x init.sh
      #        bash init.sh
+
+      # - name: Download kubectl binaries
+      #   run: |
+      #     curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          
+      # - name: Install Kubectl
+      #   run: |
+      #     sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+      #     kubectl version --client
+
+
+
+      # - name: Set up kubectl for EKS
+      #   run: |
+      #     aws eks --region ${{ secrets.AWS_REGION }} update-kubeconfig --name cluster
+
+      # - name: Deploy to Kubernetes
+      #   run: |
+      #     cd starter/frontend
+      #     kubectl apply -k k8s/ 
             
      - name: Deploy to EKS cluster
        run: |
