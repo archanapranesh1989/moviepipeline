@@ -129,7 +129,7 @@ jobs:
        working-directory: ./setup
        run: |
             chmod +x init.sh
-            sh init.sh
+            bash init.sh
      - name: Deploy to EKS cluster
        run: |
             cd starter/frontend/k8s
