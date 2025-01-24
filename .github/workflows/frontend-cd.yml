@@ -14,8 +14,6 @@ on:
       - 'starter/frontend/**'
     branches:
       - main
-
-
 jobs:
   test_job:
 
