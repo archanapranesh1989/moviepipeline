@@ -1,4 +1,4 @@
-name: ci-fullstack-backend-ci
+name: terraform
 
 # Manual trigger
 on:
