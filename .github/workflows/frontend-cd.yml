@@ -74,7 +74,7 @@ jobs:
       - name: Install dependencies and Run Linting
         run: cd starter/frontend && npm ci && npm run lint
 
-  build_job: 
+  build_deploy_job: 
     runs-on: ubuntu-latest
     
     needs: [test_job,lint_job]
