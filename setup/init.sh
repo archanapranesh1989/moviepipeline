@@ -11,7 +11,8 @@ curl -X GET -L https://github.com/kubernetes-sigs/aws-iam-authenticator/releases
 chmod +x aws-iam-authenticator
 
 echo "Updating permissions"
-./aws-iam-authenticator add user --userarn="${userarn}" --username=github-action-role --groups=system:masters --kubeconfig="$HOME"/.kube/config --prompt=false
+#./aws-iam-authenticator add user --userarn="${userarn}" --username=github-action-role --groups=system:masters --kubeconfig="$HOME"/.kube/config --prompt=false
+./aws-iam-authenticator add user --userarn="arn:aws:iam::236351108871:user/github-action-user" --username=github-action-user --groups=system:masters --kubeconfig="$HOME"/.kube/config --prompt=false
 
 # echo "Cleaning up"
 # rm aws-iam-authenticator
