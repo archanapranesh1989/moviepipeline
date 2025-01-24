@@ -2,7 +2,8 @@
 set -e -o pipefail
 
 echo "Fetching IAM github-action-user ARN"
-userarn=$(aws iam get-user --user-name github-action-user | jq -r .User.Arn)
+#userarn=$(aws iam get-user --user-name github-action-user | jq -r .User.Arn)
+userarn=arn:aws:iam::236351108871:user/github-action-user
 
 # Download tool for manipulating aws-auth
 echo "Downloading tool..."
@@ -12,6 +13,6 @@ chmod +x aws-iam-authenticator
 echo "Updating permissions"
 ./aws-iam-authenticator add user --userarn="${userarn}" --username=github-action-role --groups=system:masters --kubeconfig="$HOME"/.kube/config --prompt=false
 
-echo "Cleaning up"
-rm aws-iam-authenticator
-echo "Done!"
+# echo "Cleaning up"
+# rm aws-iam-authenticator
+# echo "Done!"
