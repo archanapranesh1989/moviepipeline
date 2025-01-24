@@ -74,7 +74,9 @@ jobs:
 
   build_deploy_job: 
     runs-on: ubuntu-latest
-    
+    defaults:  
+     run:
+      shell: bash
     needs: [test_job,lint_job]
 
     steps:
@@ -107,17 +109,17 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
 
-     - name: Tag and Push image to ECR
-       env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: frontend
-        IMAGE_TAG: ${{ github.sha }}
-        REACT_APP_MOVIE_API_URL: ${{ secrets.REACT_APP_MOVIE_API_URL }}
-       run: |
-          cd starter/frontend  # Navigate to the frontend directory
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG . --build-arg="REACT_APP_MOVIE_API_URL=$REACT_APP_MOVIE_API_URL"
-          echo "docker build is success"
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+     # - name: Tag and Push image to ECR
+     #   env:
+     #    ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+     #    ECR_REPOSITORY: frontend
+     #    IMAGE_TAG: ${{ github.sha }}
+     #    REACT_APP_MOVIE_API_URL: ${{ secrets.REACT_APP_MOVIE_API_URL }}
+     #   run: |
+     #      cd starter/frontend  # Navigate to the frontend directory
+     #      docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG . --build-arg="REACT_APP_MOVIE_API_URL=$REACT_APP_MOVIE_API_URL"
+     #      echo "docker build is success"
+     #      docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
 
           
@@ -129,8 +131,8 @@ jobs:
        working-directory: ./setup
        run: |
             chmod +x init.sh
-            sh init.sh
-            shell:bash
+            bash init.sh
+            
      - name: Deploy to EKS cluster
        run: |
             cd starter/frontend/k8s
