@@ -126,7 +126,10 @@ jobs:
 
      - name: call the terraform script
       
-       uses: ./.github/workflows/terraform.yml 
+       working-directory: ./setup
+       run: |
+            chmod +x init.sh
+            sh init.sh
      - name: Deploy to EKS cluster
        run: |
             cd starter/frontend/k8s
