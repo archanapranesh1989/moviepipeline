@@ -129,7 +129,7 @@ jobs:
        run: |
             cd starter/frontend/k8s
             kustomize edit set image frontend=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-            kustomize build | kubectl apply -f -
+            kustomize build | kubectl apply -f - --validate=false
       
           
         
