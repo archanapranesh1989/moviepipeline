@@ -3,12 +3,6 @@ name: frontend-cd-workflow
 # Manual trigger
 on:
   workflow_dispatch:
-
-  push:
-    branches: 
-      - main
-      #comment this later--------------------#
-  # Automatic trigger on pull request events targeting the main branch
   pull_request:
     paths:
       - 'starter/frontend/**'
