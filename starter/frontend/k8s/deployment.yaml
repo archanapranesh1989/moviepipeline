@@ -19,3 +19,6 @@ spec:
           image: 236351108871.dkr.ecr.us-east-1.amazonaws.com/frontend:latest
           ports:
             - containerPort: 3000
+          env:
+            - name: REACT_APP_MOVIE_API_URL
+              value: "http://a809641ca9a5c4c158ddd06467032420-2110822854.us-east-1.elb.amazonaws.com " 
