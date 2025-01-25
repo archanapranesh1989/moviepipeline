@@ -140,16 +140,7 @@ jobs:
      #        chmod +x init.sh
      #        bash init.sh
 
-      - name: Download kubectl binaries
-        run: |
-          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-          
-      - name: Install Kubectl
-        run: |
-          sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-          kubectl version --client
-
-
+    
 
       # - name: Set up kubectl for EKS
       #   run: |
@@ -160,9 +151,12 @@ jobs:
       #     cd starter/frontend
       #     kubectl apply -k k8s/ 
             
-     - name: Deploy to EKS cluster
+     - name: Download kubectl binarise and Deploy to EKS cluster
        run: |
             cd starter/frontend/k8s
+            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+            sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl 
+            kubectl version --client
             kustomize edit set image frontend=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
             kustomize build | kubectl apply -f -
             kubcetl get pods
