@@ -4,11 +4,6 @@ name: cd-fullstack-backend
 on:
   workflow_dispatch:
 
-  push:
-    branches: 
-      - main
-      #comment this later--------------------#
-  # Automatic trigger on pull request events targeting the main branch
   pull_request:
     paths:
       - 'starter/backend/**'
@@ -66,7 +61,7 @@ jobs:
       - name: Run Linting
         run: cd starter/backend && pipenv run lint
 
-  build_job: 
+  build_deploy_backend_job: 
     runs-on: ubuntu-latest
     
     needs: [test_job, lint_job]
@@ -75,13 +70,7 @@ jobs:
         # checkout of code from repo
      - name: checkout code
        uses: actions/checkout@v3
-     # - name: python setup
-     #    # Set up a python environment using the specified  version.
-     #   uses: actions/setup-python@v4
-     #   with:
-     #      python-version: "3.10"
-     # - name: Build and Run
-     #   run: cd starter/backend && pip install pipenv && pipenv install && pipenv run serve
+   
           
      - name: Configure AWS credentials
        uses: aws-actions/configure-aws-credentials@v1
@@ -123,12 +112,10 @@ jobs:
 
      - name: Download kubectl binarise and Deploy to EKS cluster
        run: |
-            #cd starter/frontend/k8s
+            
             curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
             sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl 
             kubectl version --client
-            #kustomize edit set image frontend=236351108871.dkr.ecr.us-east-1.amazonaws.com/frontend:latest
-            #kustomize build | kubectl apply -f - | kubectl get pods
             cd starter/backend
             kubectl apply -k k8s/
             kubectl get svc
