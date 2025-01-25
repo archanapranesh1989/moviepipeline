@@ -75,11 +75,11 @@ jobs:
         # checkout of code from repo
      - name: checkout code
        uses: actions/checkout@v3
-     - name: python setup
-        # Set up a python environment using the specified  version.
-       uses: actions/setup-python@v4
-       with:
-          python-version: "3.10"
+     # - name: python setup
+     #    # Set up a python environment using the specified  version.
+     #   uses: actions/setup-python@v4
+     #   with:
+     #      python-version: "3.10"
      # - name: Build and Run
      #   run: cd starter/backend && pip install pipenv && pipenv install && pipenv run serve
           
@@ -98,18 +98,55 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
 
-     - name: Build, Tag image and push image to Amazon ECR
+     - name: Build and push image to Amazon ECR
        env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: backend
-        IMAGE_TAG: ${{ github.sha }}
-        REACT_APP_MOVIE_API_URL: ${{ secrets.REACT_APP_MOVIE_API_URL }}
+        IMAGE_TAG: latest
        run: |
           cd starter/backend  # Navigate to the frontend directory
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG . 
           echo "docker build is success"
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+      
+     - name: Configure AWS credentials
+       uses: aws-actions/configure-aws-credentials@v1
+       with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_2 }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_2 }}
+        aws-region: us-east-1     
+
           
+     - name: Update the Kube config 
+       run: aws eks update-kubeconfig --name cluster --region us-east-1
+
+     # - name: call the terraform script
+      
+     #   working-directory: ./setup
+     #   run: |
+     #        chmod +x init.sh
+     #        bash init.sh
+
+    
+
+      # - name: Set up kubectl for EKS
+      #   run: |
+      #     aws eks --region ${{ secrets.AWS_REGION }} update-kubeconfig --name cluster
+
+      # - name: Deploy to Kubernetes
+      #   run: |
+      #     cd starter/frontend
+      #     kubectl apply -k k8s/ 
+            
+     - name: Download kubectl binarise and Deploy to EKS cluster
+       run: |
+            cd starter/backend/k8s
+            # curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+            # sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl 
+            # kubectl version --client
+            kustomize edit set image backend=236351108871.dkr.ecr.us-east-1.amazonaws.com/backend:latest
+            kustomize build | kubectl apply -f - | kubectl get pods
         
   
       
