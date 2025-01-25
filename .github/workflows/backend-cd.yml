@@ -4,9 +4,8 @@ name: cd-fullstack-backend
 on:
   workflow_dispatch:
 
-  pull_request:
-    paths:
-      - 'starter/backend/**'
+  push:
+   
     branches:
       - main
 
