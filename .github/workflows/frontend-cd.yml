@@ -3,9 +3,8 @@ name: frontend-cd-workflow
 # Manual trigger
 on:
   workflow_dispatch:
-  pull_request:
-    paths:
-      - 'starter/frontend/**'
+  push:
+  
     branches:
       - main
 jobs:
