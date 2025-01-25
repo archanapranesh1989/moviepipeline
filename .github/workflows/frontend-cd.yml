@@ -158,9 +158,8 @@ jobs:
             sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl 
             kubectl version --client
             kustomize edit set image frontend=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-            kustomize build | kubectl apply -f -
-            kubcetl get pods
-            kubectl get svc
+            kustomize build | kubectl apply -f - | kubectl get pods 
+            
             
           
         
