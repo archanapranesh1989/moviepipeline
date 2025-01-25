@@ -108,7 +108,7 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         #ECR_REGISTRY: 236351108871.dkr.ecr.us-east-1.amazonaws.com
         ECR_REPOSITORY: frontend
-        IMAGE_TAG: latest
+        IMAGE_TAG: 0.1
         REACT_APP_MOVIE_API_URL: ${{ secrets.REACT_APP_MOVIE_API_URL }}
        run: |
           cd starter/frontend  # Navigate to the frontend directory
