@@ -113,7 +113,7 @@ jobs:
        env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: frontend
-        IMAGE_TAG: ${{ github.sha }}
+        IMAGE_TAG: latest
         REACT_APP_MOVIE_API_URL: ${{ secrets.REACT_APP_MOVIE_API_URL }}
        run: |
           cd starter/frontend  # Navigate to the frontend directory
