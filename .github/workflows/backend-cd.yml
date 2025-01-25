@@ -1,4 +1,4 @@
-name: ci-fullstack-backend-ci
+name: cd-fullstack-backend
 
 # Manual trigger
 on:
@@ -121,32 +121,22 @@ jobs:
      - name: Update the Kube config 
        run: aws eks update-kubeconfig --name cluster --region us-east-1
 
-     # - name: call the terraform script
-      
-     #   working-directory: ./setup
-     #   run: |
-     #        chmod +x init.sh
-     #        bash init.sh
+     - name: Download kubectl binarise and Deploy to EKS cluster
+       run: |
+            #cd starter/frontend/k8s
+            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+            sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl 
+            kubectl version --client
+            #kustomize edit set image frontend=236351108871.dkr.ecr.us-east-1.amazonaws.com/frontend:latest
+            #kustomize build | kubectl apply -f - | kubectl get pods
+            cd starter/backend
+            kubectl apply -k k8s/
+            kubectl get svc
+            kubectl get pods
 
     
 
-      # - name: Set up kubectl for EKS
-      #   run: |
-      #     aws eks --region ${{ secrets.AWS_REGION }} update-kubeconfig --name cluster
-
-      # - name: Deploy to Kubernetes
-      #   run: |
-      #     cd starter/frontend
-      #     kubectl apply -k k8s/ 
-            
-     - name: Download kubectl binarise and Deploy to EKS cluster
-       run: |
-            cd starter/backend/k8s
-            # curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-            # sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl 
-            # kubectl version --client
-            kustomize edit set image backend=236351108871.dkr.ecr.us-east-1.amazonaws.com/backend:latest
-            kustomize build | kubectl apply -f - | kubectl get pods
+      
         
   
       
